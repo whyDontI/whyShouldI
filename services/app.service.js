@@ -46,17 +46,24 @@ async function createPackageJsonFile(appName, dirName) {
  * generateFile() Generate file with given template
  *
  * @param {String} template - Template text
+ *
  * @param {Object} object - Data to be inserted in template
  *
  * @return {Promise}
  */
 async function generateFile (template, dataObject, destination) {
-  let output = ejs.render(template, dataObject);
-  await fs.appendFileSync(destination, output)
-  console.log(`[ ✓  ] Created ${destination}`)
+  try {
+    const templateData = await fs.readFileSync(template, 'utf8')
+    let output = ejs.render(templateData, dataObject);
+    await fs.appendFileSync(destination, output)
+    console.log(`[ ✓  ] Created ${destination}`, output)
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 module.exports = {
   createDirectory,
-  createPackageJsonFile
+  createPackageJsonFile,
+  generateFile
 }

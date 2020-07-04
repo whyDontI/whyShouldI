@@ -8,3 +8,9 @@ program
   .addCommand(makeCreateCommand())
 
 program.parse(process.argv)
+
+// const service = require('./services/app.service.js')
+
+// service.generateFile('./templates/document.model.js', {
+//   modelName: 'Aslam'
+// })

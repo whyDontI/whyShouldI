@@ -1,3 +1,4 @@
+const fs = require('fs')
 const commander = require('commander');
 const inquirer = require('inquirer');
 const appService = require('../services/app.service')
@@ -60,86 +61,94 @@ function makeCreateCommand () {
     .command('model')
     .alias('m')
     .action(() => {
+      const modelData = {
+        properties: []
+      }
+
       function createModel () {
         var questions = [
           {
             type: 'input',
             name: 'modelName',
-            message: 'Model name: '
+            message: 'Model name: ',
+            validate: function (answer) { return (answer != '') }
           },
           {
             type: 'input',
             name: 'dbName',
-            message: 'Enter DataBase name'
+            message: 'Enter DataBase name',
+            validate: function (answer) { return (answer != '') }
           },
           {
             type: 'input',
             name: 'pluralName',
-            message: 'Custom plural form (used to build REST URL)'
-          },
-          {
-            type: 'input',
-            name: 'appType',
-            message: 'What sort of application you want?',
-            choices: [
-              'API with user authentication',
-              'Black Express Server'
-            ],
-            when: function (answers) {
-              return answers
-            }
-          },
-          {
-            type: 'input',
-            name: 'propertyName',
-            message: 'Property name',
-            when: function (answers) {
-              return answers
-            }
-          },
-          {
-            type: 'input',
-            name: 'propertyType',
-            message: 'Property type',
-            choices: [
-              'string',
-              'number',
-              'boolean',
-              'object',
-              'array',
-              'date',
-              'buffer',
-              'geopoint',
-              'any'
-            ],
-            when: function (answers) {
-              return answers
-            }
-          },
-          {
-            type: 'confirm',
-            name: 'propertyRequired',
-            message: 'Required? (y/N)',
-            when: function (answers) {
-              return answers
-            }
-          },
-          {
-            type: 'confirm',
-            name: 'askAgain',
-            message: 'Do you want to add another model',
-            when: function (answers) {
-              return answers
-            }
+            message: 'Custom plural form (used to build REST URL)',
+            validate: function (answer) { return (answer != '') }
           }
         ];
 
         inquirer.prompt(questions).then(answers => {
+          Object.assign(modelData, answers)
+          createProperty();
+        });
+      }
+
+      function createProperty () {
+        var questions = [
+          {
+            type: 'input',
+            name: 'propertyName',
+            message: 'Property name',
+            validate: function (answer) { return (answer != '') }
+          },
+          {
+            type: 'list',
+            name: 'propertyType',
+            message: 'Property type',
+            choices: [
+              'String',
+              'Number',
+              'Date',
+              'Buffer',
+              'Boolean',
+              'Mixed',
+              'ObjectId',
+              'Array',
+              'Decimal128',
+              'Map',
+              'Schema',
+            ]
+          },
+          {
+            type: 'confirm',
+            name: 'propertyRequired',
+            message: 'Required? (y/N)'
+          },
+          {
+            type: 'confirm',
+            name: 'askAgain',
+            message: 'Want to add another property'
+          }
+        ];
+
+        inquirer.prompt(questions).then(answers => {
+          modelData.properties.push(answers)
           if (answers.askAgain) {
-            createModel();
+            createProperty();
+          }
+          if (!answers.askAgain) {
+            // model.js
+            if (!fs.existsSync(`${cwd}/model/`)) {
+              fs.mkdir(`${cwd}/model/`, (err) => {
+                console.log(err)
+              })
+            }
+            appService.generateFile(`${cwd}/templates/document.model.js`, modelData, `${cwd}/model/${modelData.modelName}.model.js`)
           }
         });
       }
+
+      createModel();
     })
 
   return create;
