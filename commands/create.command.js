@@ -143,7 +143,19 @@ function makeCreateCommand () {
                 console.log(err)
               })
             }
-            appService.generateFile(`${cwd}/templates/document.model.js`, modelData, `${cwd}/model/${modelData.modelName}.model.js`)
+
+            if (!fs.existsSync(`${cwd}/routes/`)) {
+              fs.mkdir(`${cwd}/routes/`, (err) => {
+                console.log(err)
+              })
+            }
+
+            appService.generateFile(`${__dirname}/templates/document.model.js`, modelData, `${cwd}/model/${modelData.modelName}.model.js`)
+            appService.generateFile(`${__dirname}/templates/document/route.js`, modelData,  `${cwd}/routes/${modelData.modelName}.route.js`)
+            // Files to be generated next
+            // query.js
+            // route.js
+            // service.js
           }
         });
       }
