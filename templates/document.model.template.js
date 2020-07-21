@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const modelTemplate = `const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const <%= modelName %> = Schema({ 
@@ -12,5 +12,8 @@ const <%= modelName %> = Schema({
   timestamps: true
 })
 
-module.exports = mongoose.model('<%= modelName %>', <%= dbName %>, '<%= pluralName %>') // ( ModelName, Schema, CollectionName  )
+module.exports = mongoose.model('<%= modelName %>', <%= dbName %>, '<%= pluralName %>') // ( ModelName, Schema, CollectionName  )`
 
+module.exports = {
+  modelTemplate
+}

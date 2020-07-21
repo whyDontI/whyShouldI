@@ -5,6 +5,10 @@ const appService = require('../services/app.service')
 const path = require('path')
 const cwd = process.cwd() // Current Working Directory
 
+// Template data
+const { modelTemplate } = require('../templates/document.model.template')
+const { routeTemplate } = require('../templates/document.route.template')
+const { packageJsonTemplate } = require('../templates/package.json.template')
 function validateInput (input) {
    return (input !== '')  
 }
@@ -38,22 +42,33 @@ function makeCreateCommand () {
           when: function (answers) {
             return answers            
           }
-        },
-        {
-          type: 'confirm',
-          name: 'userAuth',
-          message: 'Do you need User authentication route',
-          when: function (answers) {
-            return answers
-          }
         }
       ];
+
+      // Need to work on this
+      //
+      // {
+      //   type: 'confirm',
+      //   name: 'userAuth',
+      //   message: 'Do you need User authentication route',
+      //   when: function (answers) {
+      //     return answers
+      //   }
+      // }
       
       inquirer.prompt(questions).then(answers => {
         const dirName = path.join(cwd, answers.dirName)
+
         appService.createDirectory(dirName)
-        // appService.cloneGitRepo(dirName)
-        appService.createPackageJsonFile(answers.appName, dirName)
+
+        appService.generateFile(
+          packageJsonTemplate,
+          {
+            appName: answers.appName,
+            dirName
+          },
+          `${dirName}/package.json`
+        )
       });
     })
 
@@ -133,29 +148,28 @@ function makeCreateCommand () {
 
         inquirer.prompt(questions).then(answers => {
           modelData.properties.push(answers)
+
           if (answers.askAgain) {
             createProperty();
           }
+
           if (!answers.askAgain) {
-            // model.js
+            // For model.js
             if (!fs.existsSync(`${cwd}/model/`)) {
-              fs.mkdir(`${cwd}/model/`, (err) => {
-                console.log(err)
+              fs.mkdir(`${cwd}/model/`, (error) => {
+                console.log(`[ ✗  ] error`)
               })
             }
 
+            // For route.js
             if (!fs.existsSync(`${cwd}/routes/`)) {
-              fs.mkdir(`${cwd}/routes/`, (err) => {
-                console.log(err)
+              fs.mkdir(`${cwd}/routes/`, (error) => {
+                console.log(`[ ✗  ] error`)
               })
             }
 
-            appService.generateFile(`${__dirname}/templates/document.model.js`, modelData, `${cwd}/model/${modelData.modelName}.model.js`)
-            appService.generateFile(`${__dirname}/templates/document/route.js`, modelData,  `${cwd}/routes/${modelData.modelName}.route.js`)
-            // Files to be generated next
-            // query.js
-            // route.js
-            // service.js
+            appService.generateFile(modelTemplate, modelData, `${cwd}/model/${modelData.modelName}.model.js`)
+            appService.generateFile(routeTemplate, modelData,  `${cwd}/routes/${modelData.modelName}.route.js`)
           }
         });
       }

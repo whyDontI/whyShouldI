@@ -1,4 +1,4 @@
-const express = require('express')
+const routeTemplate = `const express = require('express')
 const app = express.Router()
 const <%= modelName %>Service = require('../services/<%= modelName %>.service')
 const <%= modelName %>Validator = require('../middlewares/validators/<%= modelName %>.validator')
@@ -51,5 +51,8 @@ app.delete('/:id', auth.authentication, idValidator.isValidId, async (req, res) 
   }
 })
 
-module.exports = app
+module.exports = app`
 
+module.exports = {
+  routeTemplate
+}

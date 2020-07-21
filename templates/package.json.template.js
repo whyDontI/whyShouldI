@@ -1,11 +1,11 @@
-{
+const packageJsonTemplate = `{
   "name": "<%= appName %>",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \'Error: no test specified\' && exit 1"
   },
   "author": "",
   "license": "ISC",
@@ -31,5 +31,8 @@
   "devDependencies": {
     "standard": "^14.3.1"
   }
-}
+}`
 
+module.exports = {
+  packageJsonTemplate
+}
