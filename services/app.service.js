@@ -14,7 +14,7 @@ function createDirectory (dir) {
     fs.mkdirSync(dir)
     console.log(`[ ✓  ] ${dir} directory has been successfully created!`)
   } catch (error) {
-    console.log(`[ ✗  ] ${error}`)
+    console.log(`[ ✗  ] ${ error }`)
   }
 }
 
@@ -34,7 +34,7 @@ async function generateFile (template, dataObject, destination) {
     await fs.appendFileSync(destination, output)
     console.log(`[ ✓  ] Created ${destination}`)
   } catch (error) {
-    console.log(`[ ✗  ] error`)
+    console.log(`[ ✗  ] ${ error }`)
   }
 }
 

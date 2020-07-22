@@ -9,6 +9,7 @@ const cwd = process.cwd() // Current Working Directory
 const { modelTemplate } = require('../templates/document.model.template')
 const { routeTemplate } = require('../templates/document.route.template')
 const { packageJsonTemplate } = require('../templates/package.json.template')
+
 function validateInput (input) {
    return (input !== '')  
 }
@@ -156,15 +157,19 @@ function makeCreateCommand () {
           if (!answers.askAgain) {
             // For model.js
             if (!fs.existsSync(`${cwd}/model/`)) {
-              fs.mkdir(`${cwd}/model/`, (error) => {
-                console.log(`[ ✗  ] error`)
+              fs.mkdir(`${cwd}/model/`, { recursive: true }, (error) => {
+                if (error) {
+                  console.log(`[ ✗  ] ${ error }`)
+                }
               })
             }
 
             // For route.js
             if (!fs.existsSync(`${cwd}/routes/`)) {
-              fs.mkdir(`${cwd}/routes/`, (error) => {
-                console.log(`[ ✗  ] error`)
+              fs.mkdir(`${cwd}/routes/`, { recursive: true }, (error) => {
+                if (error) {
+                  console.log(`[ ✗  ] ${ error }`)
+                }
               })
             }
 
