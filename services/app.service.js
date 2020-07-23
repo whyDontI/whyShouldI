@@ -11,8 +11,14 @@ const cwd = process.cwd()
  */
 function createDirectory (dir) {
   try {
-    fs.mkdirSync(dir)
-    console.log(`[ ✓  ] ${dir} directory has been successfully created!`)
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true }, (error) => {
+        if (error) {
+          console.log(`[ ✗  ] ${ error }`)
+        }
+        console.log(`[ ✓  ] Created ${ dir }`)
+      })
+    }
   } catch (error) {
     console.log(`[ ✗  ] ${ error }`)
   }
@@ -29,7 +35,6 @@ function createDirectory (dir) {
  */
 async function generateFile (template, dataObject, destination) {
   try {
-    // const templateData = await fs.readFileSync(template, 'utf8')
     let output = ejs.render(template, dataObject);
     await fs.appendFileSync(destination, output)
     console.log(`[ ✓  ] Created ${destination}`)
