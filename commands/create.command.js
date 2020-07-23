@@ -8,7 +8,11 @@ const cwd = process.cwd() // Current Working Directory
 // Template data
 const { modelTemplate } = require('../templates/document.model.template')
 const { routeTemplate } = require('../templates/document.route.template')
+const { queryTemplate } = require('../templates/document.query.template')
+const { serviceTemplate } = require('../templates/document.service.template')
+const { validatorTemplate } = require('../templates/document.validator.template')
 const { packageJsonTemplate } = require('../templates/package.json.template')
+
 function validateInput (input) {
    return (input !== '')  
 }
@@ -154,22 +158,17 @@ function makeCreateCommand () {
           }
 
           if (!answers.askAgain) {
-            // For model.js
-            if (!fs.existsSync(`${cwd}/model/`)) {
-              fs.mkdir(`${cwd}/model/`, (error) => {
-                console.log(`[ ✗  ] error`)
-              })
-            }
-
-            // For route.js
-            if (!fs.existsSync(`${cwd}/routes/`)) {
-              fs.mkdir(`${cwd}/routes/`, (error) => {
-                console.log(`[ ✗  ] error`)
-              })
-            }
+            appService.createDirectory(`${cwd}/model/`)
+            appService.createDirectory(`${cwd}/route/`)
+            appService.createDirectory(`${cwd}/query/`)
+            appService.createDirectory(`${cwd}/service/`)
+            appService.createDirectory(`${cwd}/middleware/validator/`)
 
             appService.generateFile(modelTemplate, modelData, `${cwd}/model/${modelData.modelName}.model.js`)
-            appService.generateFile(routeTemplate, modelData,  `${cwd}/routes/${modelData.modelName}.route.js`)
+            appService.generateFile(routeTemplate, modelData, `${cwd}/route/${modelData.modelName}.route.js`)
+            appService.generateFile(queryTemplate, modelData, `${cwd}/query/${modelData.modelName}.query.js`)
+            appService.generateFile(serviceTemplate, modelData, `${cwd}/service/${modelData.modelName}.service.js`)
+            appService.generateFile(validatorTemplate, modelData, `${cwd}/middleware/validator/${modelData.modelName}.validator.js`)
           }
         });
       }
