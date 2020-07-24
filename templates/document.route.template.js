@@ -8,7 +8,7 @@ const __ = require('../util/response.util')
 
 app.get('/', auth.authentication, async (req, res) => {
   try {
-    const { <%= modelName %>Data, message, status  } = await <%= modelName %>Service._get<%= ( modelName ) %>s(req.query)
+    const { <%= modelName %>Data, message, status  } = await <%= modelName %>Service._get<%= ( capitalizeFirstLetter( modelName ) ) %>s(req.query)
     return __.successMsg(req, res, status, <%= modelName %>Data, message)
   } catch (error) {
     return __.errorMsg(req, res, 503, 'Service Unavaiable', error)
@@ -17,26 +17,26 @@ app.get('/', auth.authentication, async (req, res) => {
 
 app.get('/:id', auth.authentication, idValidator.isValidId, async (req, res) => {
   try {
-    const { <%= modelName %>Data, message, status  } = await <%= modelName %>Service._getOne<%= ( modelName ) %>(req.params.id)
+    const { <%= modelName %>Data, message, status  } = await <%= modelName %>Service._getOne<%= ( capitalizeFirstLetter( modelName ) ) %>(req.params.id)
     return __.successMsg(req, res, status, <%= modelName %>Data, message)
   } catch (error) {
     return __.errorMsg(req, res, 503, 'Service Unavaiable', error)
   }
 })
 
-app.post('/', auth.authentication, <%= modelName %>Validator.create<%= ( modelName ) %>, async (req, res) => {
+app.post('/', auth.authentication, <%= modelName %>Validator.create<%= ( capitalizeFirstLetter( modelName ) ) %>, async (req, res) => {
   try {
-    const { created<%= ( modelName ) %>, message, status  } = await <%= modelName %>Service._create<%= ( modelName ) %>(req.body)
-    return __.successMsg(req, res, status, created<%= ( modelName ) %>, message)
+    const { created<%= ( capitalizeFirstLetter( modelName ) ) %>, message, status  } = await <%= modelName %>Service._create<%= ( capitalizeFirstLetter( modelName ) ) %>(req.body)
+    return __.successMsg(req, res, status, created<%= ( capitalizeFirstLetter( modelName ) ) %>, message)
   } catch (error) {
     return __.errorMsg(req, res, 503, 'Service Unavaiable', error)
   }
 })
 
-app.patch('/:id', auth.authentication, idValidator.isValidId, <%= modelName %>Validator.update<%= ( modelName ) %>, async (req, res) => {
+app.patch('/:id', auth.authentication, idValidator.isValidId, <%= modelName %>Validator.update<%= ( capitalizeFirstLetter( modelName ) ) %>, async (req, res) => {
   try {
-    const { updated<%= ( modelName ) %>, message, status  } = await <%= modelName %>Service._update<%= ( modelName ) %>(req.params.id, req.body)
-    return __.successMsg(req, res, status, updated<%= ( modelName ) %>, message)
+    const { updated<%= ( capitalizeFirstLetter( modelName ) ) %>, message, status  } = await <%= modelName %>Service._update<%= ( capitalizeFirstLetter( modelName ) ) %>(req.params.id, req.body)
+    return __.successMsg(req, res, status, updated<%= ( capitalizeFirstLetter( modelName ) ) %>, message)
   } catch (error) {
     return __.errorMsg(req, res, 503, 'Service Unavaiable', error)
   }
@@ -44,8 +44,8 @@ app.patch('/:id', auth.authentication, idValidator.isValidId, <%= modelName %>Va
 
 app.delete('/:id', auth.authentication, idValidator.isValidId, async (req, res) => {
   try {
-    const { deleted<%= ( modelName ) %>, message, status  } = await <%= modelName %>Service._delete<%= ( modelName ) %>(req.params.id)
-    return __.successMsg(req, res, status, deleted<%= ( modelName ) %>, message)
+    const { deleted<%= ( capitalizeFirstLetter( modelName ) ) %>, message, status  } = await <%= modelName %>Service._delete<%= ( capitalizeFirstLetter( modelName ) ) %>(req.params.id)
+    return __.successMsg(req, res, status, deleted<%= ( capitalizeFirstLetter( modelName ) ) %>, message)
   } catch (error) {
     return __.errorMsg(req, res, 503, 'Service Unavaiable', error)
   }

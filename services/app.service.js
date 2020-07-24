@@ -1,6 +1,7 @@
 const fs = require('fs');
 const ejs = require('ejs');
 const cwd = process.cwd()
+const { capitalizeFirstLetter } = require('../util/util')
 
 /**
  * createDirectory() Create a Directory for application
@@ -35,6 +36,7 @@ function createDirectory (dir) {
  */
 async function generateFile (template, dataObject, destination) {
   try {
+    dataObject.capitalizeFirstLetter = capitalizeFirstLetter;
     let output = ejs.render(template, dataObject);
     await fs.appendFileSync(destination, output)
     console.log(`[ ✓  ] Created ${destination}`)
