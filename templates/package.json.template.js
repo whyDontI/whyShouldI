@@ -1,4 +1,5 @@
-const packageJsonTemplate = `{
+const packageJsonTemplate = `
+{
   "name": "<%= appName %>",
   "version": "1.0.0",
   "description": "",

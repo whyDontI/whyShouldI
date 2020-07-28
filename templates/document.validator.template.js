@@ -3,7 +3,7 @@ const joi = require('joi')
 const phoneNumberRegEx = /^[0-9]{10}$/
 
 class <%= modelName %>Validator {
-  async create<%= modelName %> (req, res, next) {
+  async create<%= capitalizeFirstLetter( modelName ) %> (req, res, next) {
     const schema = joi.object().keys({
       name: joi.string().required(),
       email: joi.string().email().required(),
@@ -20,7 +20,7 @@ class <%= modelName %>Validator {
 
   }
 
-  async delete<%= modelName %> (req, res, next) {
+  async delete<%= capitalizeFirstLetter( modelName ) %> (req, res, next) {
     const schema = joi.object().keys({
       id: joi.array().items(joi.string().min(24).max(24).required()).required()
     })
@@ -33,7 +33,7 @@ class <%= modelName %>Validator {
     }
   }
 
-  async update<%= modelName %> (req, res, next) {
+  async update<%= capitalizeFirstLetter( modelName ) %> (req, res, next) {
     const schema = joi.object().keys({
       name: joi.string().optional(),
       email: joi.string().email().optional(),

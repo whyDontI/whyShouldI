@@ -12,7 +12,7 @@ const <%= modelName %> = Schema({
   timestamps: true
 })
 
-module.exports = mongoose.model('<%= modelName %>', <%= dbName %>, '<%= pluralName %>') // ( ModelName, Schema, CollectionName  )`
+module.exports = mongoose.model('<%= modelName %>', <%= dbName %>, '<%= capitalizeFirstLetter( pluralName ) %>') // ( ModelName, Schema, CollectionName  )`
 
 module.exports = {
   modelTemplate

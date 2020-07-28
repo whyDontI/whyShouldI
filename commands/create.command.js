@@ -46,24 +46,23 @@ function makeCreateCommand () {
           when: function (answers) {
             return answers            
           }
+        },
+        {
+          type: 'confirm',
+          name: 'userAuth',
+          message: 'Do you need User authentication route',
+          when: function (answers) {
+            return answers
+          }
         }
       ];
 
-      // Need to work on this
-      //
-      // {
-      //   type: 'confirm',
-      //   name: 'userAuth',
-      //   message: 'Do you need User authentication route',
-      //   when: function (answers) {
-      //     return answers
-      //   }
-      // }
-      
       inquirer.prompt(questions).then(answers => {
         const dirName = path.join(cwd, answers.dirName)
 
         appService.createDirectory(dirName)
+
+        appService.generateUserFiles()
 
         appService.generateFile(
           packageJsonTemplate,
